@@ -90,16 +90,7 @@
         .detail-table th:hover { background: #e2e8f0; }
         .detail-table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; }
         .detail-table tbody tr:hover { background: #f8fafc; }
-
-        .chart-section {
-            background: white; border-radius: 12px; padding: 24px;
-            margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .chart-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: #0f172a; }
-        .chart-note { font-size: 12px; color: #94a3b8; margin-top: 8px; }
-        .chart-container { position: relative; height: 300px; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -125,16 +116,6 @@
             </div>
         </div>
         
-
-        <div class="chart-section">
-            <h2>VBIL 30-Day SEC Yield vs Fed Funds Rate</h2>
-            <p class="subtitle">Monthly data since VBIL inception (Feb 2023) through Sep 2025</p>
-            <div class="chart-container">
-                <canvas id="vbilFedChart"></canvas>
-            </div>
-            <p class="chart-note">VBIL = Vanguard Ultra-Short Bond ETF &nbsp;|&nbsp; Fed Funds = EFFR monthly average</p>
-        </div>
-
         <div class="search-box">
             <input type="text" id="search" placeholder="Search BDCs..." onkeyup="filterTable()">
         </div>
@@ -1088,82 +1069,6 @@
             });
         }
         
-
-        // VBIL vs Fed Funds chart
-        (function() {
-            const labels = [
-                'Mar 2023','Apr 2023','May 2023','Jun 2023','Jul 2023','Aug 2023','Sep 2023',
-                'Oct 2023','Nov 2023','Dec 2023','Jan 2024','Feb 2024','Mar 2024','Apr 2024',
-                'May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024',
-                'Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025',
-                'Jul 2025','Aug 2025','Sep 2025'
-            ];
-            const fedFunds = [
-                4.83,4.83,5.08,5.08,5.33,5.33,5.33,
-                5.33,5.33,5.33,5.33,5.33,5.33,5.33,
-                5.33,5.33,5.33,5.33,4.88,4.83,4.58,
-                4.33,4.33,4.33,4.33,4.33,4.33,4.33,
-                4.33,4.33,4.33
-            ];
-            const vbilYield = [
-                4.61,4.82,5.02,5.12,5.24,5.31,5.34,
-                5.35,5.30,5.20,5.22,5.27,5.26,5.28,
-                5.26,5.24,5.19,5.13,4.73,4.67,4.48,
-                4.35,4.32,4.29,4.30,4.27,4.27,4.27,
-                4.27,4.25,4.25
-            ];
-            const ctx = document.getElementById('vbilFedChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'VBIL 30-Day SEC Yield',
-                        data: vbilYield,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59,130,246,0.08)',
-                        borderWidth: 2,
-                        pointRadius: 3,
-                        tension: 0.3,
-                        fill: true
-                    }, {
-                        label: 'Fed Funds Rate (EFFR)',
-                        data: fedFunds,
-                        borderColor: '#ef4444',
-                        backgroundColor: 'transparent',
-                        borderWidth: 2,
-                        pointRadius: 2,
-                        borderDash: [5,3],
-                        stepped: 'before',
-                        tension: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { size: 12 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%`
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { ticks: { font: { size: 11 }, maxRotation: 45 } },
-                        y: {
-                            min: 4.0, max: 5.6,
-                            ticks: {
-                                font: { size: 11 },
-                                callback: v => v.toFixed(2) + '%'
-                            },
-                            title: { display: true, text: 'Yield / Rate (%)', font: { size: 12 } }
-                        }
-                    }
-                }
-            });
-        })();
         document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
     </script>
 </body>
